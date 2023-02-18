@@ -17,7 +17,7 @@ public class move : MonoBehaviour
     Rigidbody2D rb;
     Animator anim;
 
-    public int playerHealth = 3;
+    public int playerHealth = 12;
 
     bool isJump;
 
