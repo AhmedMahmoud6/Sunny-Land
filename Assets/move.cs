@@ -11,6 +11,7 @@ public class move : MonoBehaviour
     [SerializeField]
     float jump = 10f;
 
+    public int score;
 
     Transform mytransform;
     SpriteRenderer myRenderer;
@@ -23,6 +24,7 @@ public class move : MonoBehaviour
 
     void Start()
     {
+        score = 0;
         isJump = false;
         mytransform = GetComponent<Transform>();
         myRenderer = GetComponent<SpriteRenderer>();
@@ -47,11 +49,14 @@ public class move : MonoBehaviour
         {
             rb.velocity = new Vector2(0,jump);
             isJump = true;
+            anim.SetBool("Isjump",true);
         }
 
         if (Mathf.Abs(rb.velocity.y) < 0.06f)
         {
             isJump = false;
+            anim.SetBool("Isjump", false);
+
         }
 
         anim.SetFloat("Speed",Mathf.Abs(rb.velocity.x));
@@ -66,7 +71,40 @@ public class move : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            playerHealth--;
+            if (isJump && rb.velocity.y < 0)
+            {
+                Destroy(collision.gameObject);
+            }
+            else
+            {
+                playerHealth--;
+            }
+        }
+        else if(collision.CompareTag("Gem"))
+        {
+            score += 100;
+            Destroy(collision.gameObject);
+        }
+        else if (collision.CompareTag("Cherry"))
+        {
+            score += 50;
+            Destroy(collision.gameObject);
+        }
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            if (isJump && rb.velocity.y < 0)
+            {
+                Destroy(collision.gameObject);
+            }
+            else
+            {
+                playerHealth--;
+            }
         }
     }
 
